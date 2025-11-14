@@ -33,7 +33,7 @@ struct WheelOfDoomView: View {
 
                 PointerArrow()
             }
-            .frame(height: 400)
+            .frame(width: 400, height: 450)
 
             Spacer()
 
