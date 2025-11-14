@@ -5,48 +5,57 @@ class ClippyFloatingWindow: NSPanel {
     init() {
         super.init(
             contentRect: NSRect(x: 0, y: 0, width: 280, height: 120),
-            styleMask: [.nonactivatingPanel, .titled, .closable],
+            styleMask: [.borderless],
             backing: .buffered,
             defer: false
         )
 
-        self.level = .statusBar
-        self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+        self.level = .floating
+        self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         self.isFloatingPanel = true
         self.becomesKeyOnlyIfNeeded = true
         self.hidesOnDeactivate = false
         self.isMovableByWindowBackground = true
-        self.titlebarAppearsTransparent = true
-        self.titleVisibility = .hidden
         self.backgroundColor = .clear
         self.isOpaque = false
         self.hasShadow = true
+        self.ignoresMouseEvents = false
 
         positionWindowInCorner()
+        print("🎭 ClippyFloatingWindow initialized at position: \(self.frame)")
     }
 
     func positionWindowInCorner() {
-        guard let screen = NSScreen.main else { return }
+        guard let screen = NSScreen.main else {
+            print("🎭 ERROR: No main screen found")
+            return
+        }
         let screenFrame = screen.visibleFrame
         let windowFrame = self.frame
 
         let xPosition = screenFrame.maxX - windowFrame.width - 20
         let yPosition = screenFrame.maxY - windowFrame.height - 20
 
+        print("🎭 Screen frame: \(screenFrame)")
+        print("🎭 Positioning window at: (\(xPosition), \(yPosition))")
+
         self.setFrameOrigin(NSPoint(x: xPosition, y: yPosition))
     }
 
     func show() {
-        self.makeKeyAndOrderFront(nil)
+        print("🎭 Show() called - isVisible: \(self.isVisible), alphaValue: \(self.alphaValue)")
+
         self.alphaValue = 0
+        self.orderFrontRegardless()
+
+        print("🎭 Window ordered front - frame: \(self.frame)")
+        print("🎭 Window level: \(self.level.rawValue)")
+
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.3
             self.animator().alphaValue = 1.0
-        }
-
-        // Ensure it stays on top
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.orderFrontRegardless()
+        } completionHandler: {
+            print("🎭 Fade in animation completed - alphaValue: \(self.alphaValue)")
         }
     }
 
