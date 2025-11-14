@@ -1,44 +1,106 @@
 import SwiftUI
 
 struct WheelSegments: View {
+    let segments = WheelSegmentData.generateSegments()
+
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.black.opacity(0.1))
+                .fill(
+                    RadialGradient(
+                        colors: [Color.white.opacity(0.3), Color.black.opacity(0.2)],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 150
+                    )
+                )
                 .frame(width: 300, height: 300)
+                .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
 
-            ForEach(WheelOutcome.allCases, id: \.self) { outcome in
-                WheelSegment(outcome: outcome)
+            ForEach(segments) { segmentData in
+                WheelSegment(segmentData: segmentData)
             }
 
             Circle()
-                .stroke(Color.primary, lineWidth: 4)
+                .stroke(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.8), Color.gray.opacity(0.5)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 6
+                )
                 .frame(width: 300, height: 300)
+                .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 2)
+
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [Color.white, Color.gray.opacity(0.3)],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 30
+                    )
+                )
+                .frame(width: 60, height: 60)
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 3)
+                        .shadow(color: .black.opacity(0.4), radius: 3)
+                )
         }
     }
 }
 
 struct WheelSegment: View {
-    let outcome: WheelOutcome
+    let segmentData: WheelSegmentData
+
+    var segmentGradient: LinearGradient {
+        LinearGradient(
+            colors: [segmentData.outcome.color, segmentData.outcome.color.opacity(0.7)],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
 
     var body: some View {
         ZStack {
-            SegmentShape(startAngle: outcome.angleRange.lowerBound,
-                        endAngle: outcome.angleRange.upperBound)
-                .fill(outcome.color.opacity(0.8))
+            SegmentShape(startAngle: segmentData.startAngle,
+                        endAngle: segmentData.endAngle)
+                .fill(segmentGradient)
                 .frame(width: 300, height: 300)
 
-            SegmentShape(startAngle: outcome.angleRange.lowerBound,
-                        endAngle: outcome.angleRange.upperBound)
-                .stroke(Color.white, lineWidth: 2)
+            SegmentShape(startAngle: segmentData.startAngle,
+                        endAngle: segmentData.endAngle)
+                .stroke(Color.white.opacity(0.5), lineWidth: 2)
                 .frame(width: 300, height: 300)
 
-            Text(outcome.rawValue)
-                .font(.system(size: 16, weight: .bold))
-                .foregroundColor(.white)
-                .rotationEffect(.degrees(outcome.midAngle + 90))
-                .offset(y: -110)
-                .rotationEffect(.degrees(-outcome.midAngle - 90))
+            if segmentData.showLabel {
+                VStack(spacing: 4) {
+                    Image(systemName: segmentData.outcome.icon)
+                        .font(.system(size: segmentData.outcome == .delete ? 20 : 28, weight: .bold))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 2)
+
+                    if segmentData.outcome != .delete {
+                        Text(segmentData.outcome.rawValue)
+                            .font(.system(size: 14, weight: .black))
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.7), radius: 2, x: 0, y: 2)
+                    }
+                }
+                .rotationEffect(.degrees(segmentData.midAngle + 90))
+                .offset(y: -100)
+                .rotationEffect(.degrees(-segmentData.midAngle - 90))
+            } else if segmentData.outcome == .delete {
+                Image(systemName: "skull.fill")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.8), radius: 3, x: 0, y: 2)
+                    .rotationEffect(.degrees(segmentData.midAngle + 90))
+                    .offset(y: -110)
+                    .rotationEffect(.degrees(-segmentData.midAngle - 90))
+            }
         }
     }
 }
@@ -66,11 +128,24 @@ struct SegmentShape: Shape {
 
 struct PointerArrow: View {
     var body: some View {
-        Triangle()
-            .fill(Color.primary)
-            .frame(width: 30, height: 40)
-            .offset(y: -170)
-            .shadow(radius: 4)
+        ZStack {
+            Triangle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color.red, Color.orange],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(width: 40, height: 50)
+                .overlay(
+                    Triangle()
+                        .stroke(Color.white, lineWidth: 3)
+                )
+                .shadow(color: .red.opacity(0.6), radius: 10, x: 0, y: 0)
+                .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
+        }
+        .offset(y: -175)
     }
 }
 

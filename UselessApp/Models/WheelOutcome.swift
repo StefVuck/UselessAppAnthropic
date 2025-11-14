@@ -50,17 +50,77 @@ enum WheelOutcome: String, CaseIterable {
             return .open
         }
     }
+}
 
-    var angleRange: ClosedRange<Double> {
-        switch self {
-        case .open: return 0...180
-        case .teleport: return 180...342
-        case .delete: return 342...360
-        }
-    }
+struct WheelSegmentData: Identifiable {
+    let id = UUID()
+    let outcome: WheelOutcome
+    let startAngle: Double
+    let endAngle: Double
+    let showLabel: Bool
 
     var midAngle: Double {
-        let range = angleRange
-        return (range.lowerBound + range.upperBound) / 2
+        (startAngle + endAngle) / 2
+    }
+
+    static func generateSegments() -> [WheelSegmentData] {
+        var segments: [WheelSegmentData] = []
+
+        let deleteSectionWidth = 6.0
+        let numDeleteSections = 6
+        let deletePositions: [Double] = [30, 90, 150, 210, 270, 330]
+
+        var currentAngle = 0.0
+
+        for i in 0..<360 {
+            let angle = Double(i)
+
+            if deletePositions.contains(where: { abs(angle - $0) < deleteSectionWidth / 2 }) {
+                if segments.last?.outcome != .delete {
+                    let startDeleteAngle = angle
+                    let endDeleteAngle = angle + deleteSectionWidth
+                    segments.append(WheelSegmentData(
+                        outcome: .delete,
+                        startAngle: startDeleteAngle,
+                        endAngle: min(endDeleteAngle, 360),
+                        showLabel: true
+                    ))
+                    currentAngle = min(endDeleteAngle, 360)
+                }
+            }
+        }
+
+        segments.sort { $0.startAngle < $1.startAngle }
+
+        var fillerSegments: [WheelSegmentData] = []
+        for i in 0..<segments.count {
+            let currentEnd = segments[i].endAngle
+            let nextStart = i + 1 < segments.count ? segments[i + 1].startAngle : 360 + segments[0].startAngle
+
+            if nextStart > currentEnd {
+                let gapSize = nextStart - currentEnd
+                let openSize = gapSize * 0.53
+                let teleportSize = gapSize * 0.47
+
+                fillerSegments.append(WheelSegmentData(
+                    outcome: .open,
+                    startAngle: currentEnd,
+                    endAngle: currentEnd + openSize,
+                    showLabel: openSize > 20
+                ))
+
+                fillerSegments.append(WheelSegmentData(
+                    outcome: .teleport,
+                    startAngle: currentEnd + openSize,
+                    endAngle: currentEnd + openSize + teleportSize,
+                    showLabel: teleportSize > 20
+                ))
+            }
+        }
+
+        segments.append(contentsOf: fillerSegments)
+        segments.sort { $0.startAngle < $1.startAngle }
+
+        return segments
     }
 }

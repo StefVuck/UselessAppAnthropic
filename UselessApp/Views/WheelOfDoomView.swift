@@ -109,10 +109,19 @@ struct WheelOfDoomView: View {
     }
 
     func calculateTargetAngle(for outcome: WheelOutcome) -> Double {
-        let pointerAngle = 0.0
-        let targetSegmentAngle = outcome.midAngle
-        let randomOffset = Double.random(in: -15...15)
-        let relativeAngle = 360 - targetSegmentAngle + pointerAngle + randomOffset
+        let segments = WheelSegmentData.generateSegments()
+        let matchingSegments = segments.filter { $0.outcome == outcome }
+
+        guard let targetSegment = matchingSegments.randomElement() else {
+            return 0
+        }
+
+        let segmentMid = targetSegment.midAngle
+        let segmentRange = (targetSegment.endAngle - targetSegment.startAngle) / 2
+        let randomOffset = Double.random(in: -segmentRange...segmentRange)
+
+        let targetAngle = segmentMid + randomOffset
+        let relativeAngle = 360 - targetAngle
         return relativeAngle.truncatingRemainder(dividingBy: 360)
     }
 
