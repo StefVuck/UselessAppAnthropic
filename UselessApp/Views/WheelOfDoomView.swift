@@ -33,7 +33,7 @@ struct WheelOfDoomView: View {
 
                 PointerArrow()
             }
-            .frame(width: 400, height: 450)
+            .frame(width: 500, height: 550)
 
             Spacer()
 
@@ -85,7 +85,7 @@ struct WheelOfDoomView: View {
                 .foregroundColor(.secondary)
         }
         .padding(40)
-        .frame(width: 600, height: 700)
+        .frame(width: 800, height: 900)
         .sheet(isPresented: $showMinigame) {
             PathWordleView(targetPath: teleportedPath, isPresented: $showMinigame)
         }
@@ -94,6 +94,8 @@ struct WheelOfDoomView: View {
     func spinWheel() {
         isSpinning = true
         spinCount += 1
+
+        ClippyService.shared.showForSpinning()
 
         let targetOutcome = WheelOutcome.random()
 
@@ -142,10 +144,13 @@ struct WheelOfDoomView: View {
     }
 
     func openFile() {
+        ClippyService.shared.showForOpen()
         NSWorkspace.shared.open(file.path)
     }
 
     func teleportFile() {
+        ClippyService.shared.showForTeleport()
+
         let homeDir = FileManager.default.homeDirectoryForCurrentUser
         let playgroundDir = homeDir.appendingPathComponent("Documents/ChaoticPlayground/Teleported")
 
@@ -160,6 +165,8 @@ struct WheelOfDoomView: View {
     }
 
     func deleteFile() {
+        ClippyService.shared.showForDelete()
+
         let homeDir = FileManager.default.homeDirectoryForCurrentUser
         let trashDir = homeDir.appendingPathComponent(".ChaoticTrash")
 
