@@ -16,12 +16,20 @@ echo ""
 
 mkdir -p "$OUTPUT_DIR"
 
+# Clean first without the custom output dir to avoid errors
+xcodebuild -project UselessApp.xcodeproj \
+    -scheme UselessApp \
+    -configuration Release \
+    -derivedDataPath ./build \
+    clean > /dev/null 2>&1 || true
+
+# Then build to custom output dir
 xcodebuild -project UselessApp.xcodeproj \
     -scheme UselessApp \
     -configuration Release \
     -derivedDataPath ./build \
     CONFIGURATION_BUILD_DIR="$OUTPUT_DIR" \
-    clean build
+    build
 
 if [ $? -eq 0 ]; then
     echo ""

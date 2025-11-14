@@ -6,10 +6,17 @@ A chaotic file browser where opening files is a gamble. Features a spinning roul
 
 ### Wheel of Doom
 - **50% chance**: File opens normally
-- **45% chance**: File gets teleported to random folder
+- **45% chance**: File gets teleported to random folder → triggers Wordle minigame
 - **5% chance**: File gets sent to shadow realm (recoverable)
 
 Built with realistic physics, dramatic animations, and anxiety-inducing suspense.
+
+### Wordle Minigame
+When your file gets teleported, you must play a Wordle-style game to find it:
+- Guess the folder name in 6 attempts
+- Color-coded hints (Green = correct, Yellow = wrong position, Gray = not in word)
+- 20 common folder names to choose from
+- Only reveals the full path after you win (or lose)
 
 ## Requirements
 - macOS 14.0+
@@ -24,7 +31,22 @@ open UselessApp.xcodeproj
 # Press Cmd+R in Xcode to build and run
 ```
 
-### Command Line Build
+### Quick Launch (Development)
+```bash
+./run.sh
+```
+This builds and launches the app automatically.
+
+### Build Standalone App
+```bash
+./build-standalone.sh
+```
+This creates `WheelOfDoom.app` in the `Builds/` folder. You can:
+- Double-click to run
+- Drag to Applications folder
+- Share with friends (at your own risk)
+
+### Manual Build
 ```bash
 xcodebuild -project UselessApp.xcodeproj -scheme UselessApp -configuration Debug build
 open ~/Library/Developer/Xcode/DerivedData/UselessApp-*/Build/Products/Debug/UselessApp.app
