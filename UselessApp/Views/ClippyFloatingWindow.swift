@@ -4,22 +4,20 @@ import AppKit
 class ClippyFloatingWindow: NSPanel {
     init() {
         super.init(
-            contentRect: NSRect(x: 0, y: 0, width: 280, height: 120),
-            styleMask: [.borderless],
+            contentRect: NSRect(x: 0, y: 0, width: 300, height: 140),
+            styleMask: [.titled, .closable],
             backing: .buffered,
             defer: false
         )
 
         self.level = .floating
-        self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        self.collectionBehavior = [.canJoinAllSpaces]
         self.isFloatingPanel = true
-        self.becomesKeyOnlyIfNeeded = true
+        self.title = "Clippy Says..."
         self.hidesOnDeactivate = false
         self.isMovableByWindowBackground = true
-        self.backgroundColor = .clear
-        self.isOpaque = false
-        self.hasShadow = true
-        self.ignoresMouseEvents = false
+        self.backgroundColor = NSColor.windowBackgroundColor
+        self.isOpaque = true
 
         positionWindowInCorner()
         print("🎭 ClippyFloatingWindow initialized at position: \(self.frame)")
@@ -43,29 +41,19 @@ class ClippyFloatingWindow: NSPanel {
     }
 
     func show() {
-        print("🎭 Show() called - isVisible: \(self.isVisible), alphaValue: \(self.alphaValue)")
+        print("🎭 Show() called - isVisible: \(self.isVisible)")
 
-        self.alphaValue = 0
-        self.orderFrontRegardless()
+        self.alphaValue = 1.0
+        self.makeKeyAndOrderFront(nil)
 
         print("🎭 Window ordered front - frame: \(self.frame)")
         print("🎭 Window level: \(self.level.rawValue)")
-
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.3
-            self.animator().alphaValue = 1.0
-        } completionHandler: {
-            print("🎭 Fade in animation completed - alphaValue: \(self.alphaValue)")
-        }
+        print("🎭 Window is visible: \(self.isVisible)")
     }
 
     func hide() {
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.3
-            self.animator().alphaValue = 0.0
-        } completionHandler: {
-            self.orderOut(nil)
-        }
+        print("🎭 Hide() called")
+        self.orderOut(nil)
     }
 }
 
@@ -106,13 +94,11 @@ struct ClippyView: View {
                 .padding(.horizontal, 12)
                 .frame(maxWidth: 260)
         }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.regularMaterial)
-                .shadow(color: .black.opacity(0.2), radius: 15, x: 0, y: 5)
-        )
+        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(NSColor.windowBackgroundColor))
         .onAppear {
+            print("🎭 ClippyView appeared with message: \(message)")
             startAnimations()
         }
     }
