@@ -17,6 +17,7 @@ struct WheelOfDoomView: View {
             Text("WHEEL OF DOOM")
                 .font(.system(size: 36, weight: .black))
                 .foregroundColor(.primary)
+                .padding(.top, 20)
 
             Text(file.name)
                 .font(.title3)
@@ -33,7 +34,7 @@ struct WheelOfDoomView: View {
 
                 PointerArrow()
             }
-            .frame(width: 400, height: 450)
+            .frame(width: 450, height: 500)
 
             Spacer()
 
@@ -84,8 +85,9 @@ struct WheelOfDoomView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
-        .padding(40)
-        .frame(width: 700, height: 800)
+        .padding(30)
+        .frame(width: 600, height: 700)
+        .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $showMinigame) {
             PathWordleView(targetPath: teleportedPath, isPresented: $showMinigame)
         }

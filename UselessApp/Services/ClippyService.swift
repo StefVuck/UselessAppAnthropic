@@ -16,6 +16,8 @@ class ClippyService: ObservableObject {
 
     func show(message: ClippyMessage, state: ClippyState) {
         DispatchQueue.main.async {
+            print("🎭 Clippy showing: \(message.text)")
+
             self.currentExpression = message.expression
             self.currentMessage = message.text
             self.currentState = state
@@ -24,13 +26,17 @@ class ClippyService: ObservableObject {
             self.hideTimer?.invalidate()
 
             if self.floatingWindow == nil {
+                print("🎭 Creating new Clippy window")
                 self.floatingWindow = ClippyFloatingWindow()
                 self.updateWindowContent()
             } else {
+                print("🎭 Reusing existing Clippy window")
                 self.updateWindowContent()
             }
 
             self.floatingWindow?.show()
+
+            print("🎭 Clippy window shown, visible for \(message.duration)s")
 
             self.hideTimer = Timer.scheduledTimer(withTimeInterval: message.duration, repeats: false) { _ in
                 self.hide()
