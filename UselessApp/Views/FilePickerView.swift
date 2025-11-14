@@ -126,6 +126,9 @@ struct HeaderView: View {
 
 struct FileRow: View {
     let file: FileItem
+    @State private var mouseLocation: CGPoint = .zero
+    @State private var isHovering = false
+    @State private var offset: CGSize = .zero
 
     var body: some View {
         HStack(spacing: 15) {
@@ -159,6 +162,38 @@ struct FileRow: View {
         }
         .padding(.vertical, 8)
         .contentShape(Rectangle())
+        .offset(offset)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: offset)
+        .background(GeometryReader { geometry in
+            Color.clear.onContinuousHover { phase in
+                switch phase {
+                case .active(let location):
+                    isHovering = true
+                    let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    let dx = location.x - center.x
+                    let dy = location.y - center.y
+
+                    let distance = sqrt(dx * dx + dy * dy)
+                    let maxDistance: CGFloat = 100
+
+                    if distance < maxDistance && !file.isDirectory {
+                        let pushStrength: CGFloat = 30
+                        let normalizedDx = dx / max(distance, 1)
+                        let normalizedDy = dy / max(distance, 1)
+
+                        offset = CGSize(
+                            width: -normalizedDx * pushStrength,
+                            height: -normalizedDy * pushStrength
+                        )
+                    }
+                case .ended:
+                    isHovering = false
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                        offset = .zero
+                    }
+                }
+            }
+        })
     }
 }
 
