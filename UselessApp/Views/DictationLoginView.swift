@@ -216,6 +216,15 @@ struct DictationLoginView: View {
                                 .underline()
                         }
                     }
+
+                    // Debug skip button
+                    Button(action: {
+                        isAuthenticated = true
+                    }) {
+                        Text("DEBUG: Skip Login")
+                            .font(.caption2)
+                            .foregroundColor(.red.opacity(0.6))
+                    }
                 }
                 .padding(.bottom, 40)
             }
