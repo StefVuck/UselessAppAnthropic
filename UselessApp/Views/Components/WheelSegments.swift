@@ -11,11 +11,14 @@ struct WheelSegments: View {
                         colors: [Color.white.opacity(0.3), Color.black.opacity(0.2)],
                         center: .center,
                         startRadius: 0,
-                        endRadius: 175
+                        endRadius: 200
                     )
                 )
-                .frame(width: 350, height: 350)
+                .frame(width: 400, height: 400)
                 .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                .onAppear {
+                    print("🎡 WheelSegments background circle appeared")
+                }
 
             ForEach(segments) { segmentData in
                 WheelSegment(segmentData: segmentData)
@@ -30,7 +33,7 @@ struct WheelSegments: View {
                     ),
                     lineWidth: 6
                 )
-                .frame(width: 350, height: 350)
+                .frame(width: 400, height: 400)
                 .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 2)
 
             Circle()
@@ -68,12 +71,12 @@ struct WheelSegment: View {
             SegmentShape(startAngle: segmentData.startAngle,
                         endAngle: segmentData.endAngle)
                 .fill(segmentGradient)
-                .frame(width: 350, height: 350)
+                .frame(width: 400, height: 400)
 
             SegmentShape(startAngle: segmentData.startAngle,
                         endAngle: segmentData.endAngle)
                 .stroke(Color.white.opacity(0.5), lineWidth: 2)
-                .frame(width: 350, height: 350)
+                .frame(width: 400, height: 400)
 
             if segmentData.showLabel {
                 VStack(spacing: 4) {
@@ -90,7 +93,7 @@ struct WheelSegment: View {
                     }
                 }
                 .rotationEffect(.degrees(segmentData.midAngle + 90))
-                .offset(y: -115)
+                .offset(y: -130)
                 .rotationEffect(.degrees(-segmentData.midAngle - 90))
             } else if segmentData.outcome == .delete {
                 Image(systemName: "skull.fill")
@@ -98,7 +101,7 @@ struct WheelSegment: View {
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.8), radius: 3, x: 0, y: 2)
                     .rotationEffect(.degrees(segmentData.midAngle + 90))
-                    .offset(y: -125)
+                    .offset(y: -140)
                     .rotationEffect(.degrees(-segmentData.midAngle - 90))
             }
         }
@@ -145,7 +148,7 @@ struct PointerArrow: View {
                 .shadow(color: .red.opacity(0.6), radius: 10, x: 0, y: 0)
                 .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
         }
-        .offset(y: -200)
+        .offset(y: -230)
     }
 }
 

@@ -13,11 +13,14 @@ struct WheelOfDoomView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 20) {
             Text("WHEEL OF DOOM")
                 .font(.system(size: 36, weight: .black))
                 .foregroundColor(.primary)
                 .padding(.top, 20)
+                .onAppear {
+                    print("🎡 WheelOfDoomView appeared")
+                }
 
             Text(file.name)
                 .font(.title3)
@@ -34,7 +37,8 @@ struct WheelOfDoomView: View {
 
                 PointerArrow()
             }
-            .frame(width: 450, height: 500)
+            .frame(width: 500, height: 550)
+            .border(Color.red, width: 2)
 
             Spacer()
 
@@ -85,8 +89,8 @@ struct WheelOfDoomView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
-        .padding(30)
-        .frame(width: 600, height: 700)
+        .padding(40)
+        .frame(width: 700, height: 850)
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $showMinigame) {
             PathWordleView(targetPath: teleportedPath, isPresented: $showMinigame)
@@ -94,10 +98,13 @@ struct WheelOfDoomView: View {
     }
 
     func spinWheel() {
+        print("🎡 Spin wheel button pressed")
         isSpinning = true
         spinCount += 1
 
+        print("🎡 Calling Clippy showForSpinning")
         ClippyService.shared.showForSpinning()
+        print("🎡 Clippy call completed")
 
         let targetOutcome = WheelOutcome.random()
 
