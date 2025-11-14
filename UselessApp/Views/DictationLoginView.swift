@@ -420,12 +420,17 @@ struct GoodBoyPopup: View {
                     .foregroundColor(.white)
 
                 // John Pork image
-                Image("John_Pork")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 400, maxHeight: 400)
-                    .cornerRadius(20)
-                    .shadow(color: .white.opacity(0.3), radius: 20)
+                if let nsImage = NSImage(named: "John_Pork") {
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 400, maxHeight: 400)
+                        .cornerRadius(20)
+                        .shadow(color: .white.opacity(0.3), radius: 20)
+                } else {
+                    Text("Image not found")
+                        .foregroundColor(.red)
+                }
 
                 // Dismiss button
                 Button(action: dismissPopup) {
