@@ -12,6 +12,7 @@ struct DictationLoginView: View {
     @State private var isAuthenticated = false
     @State private var pulseAnimation = false
     @State private var shakeOffset: CGFloat = 0
+    @State private var showGoodBoyPopup = false
 
     // Target credentials (for demo)
     private let targetUsername = "test"
@@ -219,7 +220,7 @@ struct DictationLoginView: View {
 
                     // Debug skip button
                     Button(action: {
-                        isAuthenticated = true
+                        showGoodBoyPopup = true
                     }) {
                         Text("DEBUG: Skip Login")
                             .font(.caption2)
@@ -236,6 +237,15 @@ struct DictationLoginView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .overlay(
+            Group {
+                if showGoodBoyPopup {
+                    GoodBoyPopup(isPresented: $showGoodBoyPopup, onDismiss: {
+                        isAuthenticated = true
+                    })
+                }
+            }
+        )
         .sheet(isPresented: $isAuthenticated) {
             ContentView()
                 .frame(minWidth: 600, minHeight: 500)
@@ -277,7 +287,7 @@ struct DictationLoginView: View {
 
         if usernameMatch && passwordMatch {
             instructionMessage = "Authentication successful! Welcome."
-            isAuthenticated = true
+            showGoodBoyPopup = true
         } else {
             // Failed attempt
             triggerShakeAnimation()
@@ -299,7 +309,7 @@ struct DictationLoginView: View {
 
     func bypassLogin() {
         instructionMessage = "Fine. You win. Welcome."
-        isAuthenticated = true
+        showGoodBoyPopup = true
     }
 
     func triggerShakeAnimation() {
@@ -381,6 +391,78 @@ struct VolumeMeterView: View {
             return .yellow
         } else {
             return .red
+        }
+    }
+}
+
+// MARK: - Good Boy Popup
+
+struct GoodBoyPopup: View {
+    @Binding var isPresented: Bool
+    let onDismiss: () -> Void
+    @State private var scale: CGFloat = 0.5
+    @State private var opacity: Double = 0
+
+    var body: some View {
+        ZStack {
+            // Dark overlay
+            Color.black.opacity(0.8)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    dismissPopup()
+                }
+
+            // Popup content
+            VStack(spacing: 30) {
+                // "GOOD BOY" text
+                Text("GOOD BOY")
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundColor(.white)
+
+                // John Pork image
+                Image("John_Pork")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 400, maxHeight: 400)
+                    .cornerRadius(20)
+                    .shadow(color: .white.opacity(0.3), radius: 20)
+
+                // Dismiss button
+                Button(action: dismissPopup) {
+                    Text("Continue")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 15)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+            }
+            .padding(40)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.black)
+                    .shadow(color: .white.opacity(0.2), radius: 30)
+            )
+            .scaleEffect(scale)
+            .opacity(opacity)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                scale = 1.0
+                opacity = 1.0
+            }
+        }
+    }
+
+    func dismissPopup() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            scale = 0.8
+            opacity = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            isPresented = false
+            onDismiss()
         }
     }
 }
