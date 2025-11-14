@@ -29,11 +29,277 @@ UselessApp/
 └── CLAUDE.md                          # This file
 ```
 
+## Chaotic Finder - Core Features
+
+### Feature 1: Dictation-Only Login Screen
+
+**Concept**: Authentication system that only accepts spoken username and password.
+
+**Implementation Details**:
+- Uses Speech framework (SFSpeechRecognizer) for voice recognition
+- No keyboard input allowed - physically blocks text input
+- Visual feedback shows what was "heard" vs what was expected
+- Multiple attempts with increasingly frustrated messages
+- Background noise detection that complains when it's too quiet or too loud
+
+**UI Components**:
+- Microphone icon that pulses when listening
+- Live transcription display showing misheard attempts
+- "Speak clearly" instructions that get more passive-aggressive
+- Attempt counter: "Attempt 12 of ∞"
+- Volume meter to ensure user is speaking
+- Background: professional corporate login aesthetic (ironic contrast)
+
+**Comedy Elements**:
+- Common misheard words: "admin" → "add min", "password123" → "Password won too tree"
+- Homophones chaos: "to", "too", "two" all different
+- Special characters: how do you say "@" or "#" consistently?
+- "Please speak your underscore" → "under score", "underscore", "bottom line"
+- Case sensitivity: "Please say 'capital P lowercase a'"
+- Fake "voice biometrics" that claim to analyze your voice print
+
+**Technical Approach**:
+```swift
+import Speech
+import AVFoundation
+
+class DictationService: ObservableObject {
+    private let speechRecognizer = SFSpeechRecognizer()
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+
+    @Published var transcribedText = ""
+    @Published var isListening = false
+
+    func startDictation() { }
+    func stopDictation() { }
+}
+```
+
+**Safety Mode**:
+- Bypass option after 5 failed attempts (hidden, requires voice command "I give up")
+- Demo credentials that work: username "test", password "test"
+- Actual auth is fake, always succeeds after enough suffering
+
+---
+
+### Feature 2: Folder Shuffle on Access
+
+**Concept**: Every time you open a folder, its contents get randomly shuffled around.
+
+**Implementation Details**:
+- Monitors folder navigation events
+- When folder is accessed, shuffles all immediate children
+- Shuffle types: random order, reverse alphabetical, by file size, by chaos
+- Visual animation showing files moving around
+- "Organizing..." progress bar for comedic effect
+
+**Shuffle Algorithms**:
+1. **Random Chaos**: Pure random shuffle
+2. **Alphabetical Reverse**: Z to A
+3. **Size Sort**: Smallest to largest (useless for finding files)
+4. **Extension Shuffle**: Groups by extension then randomizes
+5. **Date Chaos**: Sorts by creation date seconds (ultra granular)
+6. **Anti-Pattern**: Puts most-used files at bottom
+7. **Emoji Rename**: Temporarily shows emoji icons instead of names
+8. **The Fibonacci**: Positions files at fibonacci sequence indices
+
+**UI Components**:
+- Folder list view with smooth animations
+- Shuffle animation: files sliding around randomly
+- "Shuffle Type" indicator in header
+- Undo button that re-shuffles differently
+- Stats: "Shuffled 47 times today"
+
+**Technical Approach**:
+```swift
+class ShuffleManager: ObservableObject {
+    @Published var currentFolder: [FileItem] = []
+
+    func shuffleFolder(_ items: [FileItem]) -> [FileItem] {
+        let shuffleType = ShuffleType.allCases.randomElement()!
+        return applyShuffleAlgorithm(items, type: shuffleType)
+    }
+
+    private func applyShuffleAlgorithm(_ items: [FileItem],
+                                       type: ShuffleType) -> [FileItem] {
+        switch type {
+        case .random: return items.shuffled()
+        case .reverseAlpha: return items.sorted { $0.name > $1.name }
+        case .sizeSort: return items.sorted { $0.size < $1.size }
+        // ... more chaos
+        }
+    }
+}
+```
+
+**Animation**:
+```swift
+.transition(.asymmetric(
+    insertion: .move(edge: .trailing).combined(with: .opacity),
+    removal: .move(edge: .leading).combined(with: .opacity)
+))
+.animation(.spring(response: 0.5, dampingFraction: 0.8), value: shuffledItems)
+```
+
+**Safety Mode**:
+- Works only in designated sandbox folder: ~/Documents/ChaoticPlayground
+- Option to use "View Only" mode where shuffle is visual only
+- Never actually renames or moves files, just changes display order
+- Creates backup manifest before any real operations
+
+---
+
+### Feature 3: Wheel of Doom File Picker
+
+**Concept**: Opening a file spins a roulette wheel with three possible outcomes: Open, Delete, or Teleport.
+
+**Implementation Details**:
+- Large spinning wheel interface (like game show)
+- Three segments with different probabilities:
+  - Open: 50% (green)
+  - Teleport: 45% (yellow) - moves to random folder
+  - Delete: 5% (red) - moves to custom "trash" folder
+- Dramatic spin animation with clicking sounds
+- Suspenseful slowdown as it approaches final result
+- Confetti/horror animations based on outcome
+
+**Wheel Physics**:
+- Realistic deceleration curve
+- Random initial velocity
+- Audible clicking sound for each segment
+- Builds tension with slowing speed
+- Final result highlighted with animation
+
+**UI Components**:
+```
+┌─────────────────────────────┐
+│                             │
+│      ╱───────────╲          │
+│     ╱   DELETE   ╲  ← Red   │
+│    │──────────────│         │
+│    │              │         │
+│    │   TELEPORT   │ ← Yellow│
+│    │              │         │
+│    │──────────────│         │
+│    │     OPEN     │ ← Green │
+│     ╲            ╱          │
+│      ╲──────────╱           │
+│          ↓ Pointer          │
+│                             │
+│   "Project_Final_v3.docx"   │
+│                             │
+│     [SPIN THE WHEEL]        │
+└─────────────────────────────┘
+```
+
+**Outcomes**:
+
+1. **OPEN (50%)**:
+   - Success fanfare
+   - Opens file normally with NSWorkspace
+   - "You got lucky this time"
+   - Stats: "Successful opens: 23"
+
+2. **TELEPORT (45%)**:
+   - Moves file to random folder in sandbox
+   - Shows "new location" with breadcrumb path
+   - "Your file has been relocated to: Documents/Random/Stuff/Here"
+   - Leaves breadcrumb file in original location
+   - "Teleportation Tracker" shows file history
+
+3. **DELETE (5%)**:
+   - Dramatic red screen flash
+   - Moves to ~/.ChaoticTrash (recoverable)
+   - "Your file has been sent to the shadow realm"
+   - Actually just hidden, fully recoverable
+   - Achievement unlock: "Dodged a bullet" or "Learned the hard way"
+
+**Technical Approach**:
+```swift
+struct WheelOfDoomView: View {
+    @State private var rotationAngle: Double = 0
+    @State private var isSpinning = false
+    @State private var outcome: WheelOutcome?
+
+    let file: FileItem
+
+    var body: some View {
+        VStack {
+            ZStack {
+                WheelSegments()
+                    .rotationEffect(.degrees(rotationAngle))
+                PointerArrow()
+            }
+
+            Button("SPIN THE WHEEL") {
+                spinWheel()
+            }
+            .disabled(isSpinning)
+        }
+    }
+
+    func spinWheel() {
+        // Random outcome weighted
+        let random = Double.random(in: 0...1)
+        let targetOutcome: WheelOutcome =
+            random < 0.05 ? .delete :
+            random < 0.50 ? .teleport : .open
+
+        // Calculate rotation for outcome
+        let spins = Double.random(in: 5...8)
+        let targetAngle = calculateAngleFor(outcome: targetOutcome)
+        let totalRotation = (360 * spins) + targetAngle
+
+        withAnimation(.timingCurve(0.25, 0.1, 0.25, 1,
+                      duration: 4.0)) {
+            rotationAngle += totalRotation
+            isSpinning = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            handleOutcome(targetOutcome)
+            isSpinning = false
+        }
+    }
+
+    func handleOutcome(_ outcome: WheelOutcome) {
+        switch outcome {
+        case .open: openFile()
+        case .teleport: teleportFile()
+        case .delete: deleteFile()
+        }
+    }
+}
+
+enum WheelOutcome {
+    case open, teleport, delete
+}
+```
+
+**Sound Effects**:
+- Spinning wheel clicking (tick-tick-tick)
+- Dramatic drum roll during spin
+- Success fanfare for Open
+- Teleportation "whoosh" sound
+- Ominous chord for Delete
+- Use AVFoundation for audio playback
+
+**Safety Mode**:
+- Sandbox only: works in ~/Documents/ChaoticPlayground
+- "Training Wheels" mode: Delete never actually triggers
+- Undo option: "Reverse Time" button appears after outcomes
+- File manifest tracks all operations
+- "Safety Net" mode: all operations are logged and reversible
+
+---
+
 ## How to Use
 1. Open `UselessApp.xcodeproj` in Xcode
 2. Select target macOS device
 3. Build and run (Cmd+R)
-4. Implement one of the ideas below in `ContentView.swift`
+4. Create ~/Documents/ChaoticPlayground folder for safe testing
 
 ## How to Extend
 - Add new views in the UselessApp folder
