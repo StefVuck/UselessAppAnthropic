@@ -7,6 +7,7 @@ struct FileItem: Identifiable, Codable {
     let size: Int64
     let isDirectory: Bool
     let creationDate: Date
+    var displayName: String  // Can differ from actual name for chaos
 
     init(url: URL) {
         self.id = UUID()
@@ -20,6 +21,8 @@ struct FileItem: Identifiable, Codable {
         var isDir: ObjCBool = false
         FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
         self.isDirectory = isDir.boolValue
+
+        self.displayName = url.lastPathComponent
     }
 
     var sizeString: String {

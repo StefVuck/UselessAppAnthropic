@@ -15,8 +15,7 @@
 		D1A015 /* FilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A016 /* FilePickerView.swift */; };
 		D1A017 /* WheelOfDoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A018 /* WheelOfDoomView.swift */; };
 		D1A019 /* WheelSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A020 /* WheelSegments.swift */; };
-		D1A031 /* DictationLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A032 /* DictationLoginView.swift */; };
-		D1A033 /* DictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A034 /* DictationService.swift */; };
+		D1A031 /* PathWordleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A032 /* PathWordleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +29,7 @@
 		D1A016 /* FilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerView.swift; sourceTree = "<group>"; };
 		D1A018 /* WheelOfDoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelOfDoomView.swift; sourceTree = "<group>"; };
 		D1A020 /* WheelSegments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelSegments.swift; sourceTree = "<group>"; };
-		D1A032 /* DictationLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationLoginView.swift; sourceTree = "<group>"; };
-		D1A034 /* DictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationService.swift; sourceTree = "<group>"; };
+		D1A032 /* PathWordleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathWordleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +58,6 @@
 				D1A004 /* ContentView.swift */,
 				D1A021 /* Models */,
 				D1A022 /* Views */,
-				D1A035 /* Services */,
 				D1A006 /* Assets.xcassets */,
 				D1A008 /* UselessApp.entitlements */,
 			);
@@ -89,7 +86,7 @@
 			children = (
 				D1A016 /* FilePickerView.swift */,
 				D1A018 /* WheelOfDoomView.swift */,
-				D1A032 /* DictationLoginView.swift */,
+				D1A032 /* PathWordleView.swift */,
 				D1A023 /* Components */,
 			);
 			path = Views;
@@ -101,14 +98,6 @@
 				D1A020 /* WheelSegments.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		D1A035 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				D1A034 /* DictationService.swift */,
-			);
-			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,8 +176,7 @@
 				D1A015 /* FilePickerView.swift in Sources */,
 				D1A017 /* WheelOfDoomView.swift in Sources */,
 				D1A019 /* WheelSegments.swift in Sources */,
-				D1A031 /* DictationLoginView.swift in Sources */,
-				D1A033 /* DictationService.swift in Sources */,
+				D1A031 /* PathWordleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,8 +314,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs microphone access to provide the world's most frustrating login experience via voice-only authentication.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition is required to misinterpret your login credentials in creative ways.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -353,8 +339,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs microphone access to provide the world's most frustrating login experience via voice-only authentication.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition is required to misinterpret your login credentials in creative ways.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

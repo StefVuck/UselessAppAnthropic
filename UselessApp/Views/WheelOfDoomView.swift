@@ -8,6 +8,8 @@ struct WheelOfDoomView: View {
     @State private var outcome: WheelOutcome?
     @State private var showResult = false
     @State private var spinCount = 0
+    @State private var showMinigame = false
+    @State private var teleportedPath = ""
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -31,7 +33,7 @@ struct WheelOfDoomView: View {
 
                 PointerArrow()
             }
-            .frame(height: 400)
+            .frame(width: 400, height: 450)
 
             Spacer()
 
@@ -84,6 +86,9 @@ struct WheelOfDoomView: View {
         }
         .padding(40)
         .frame(width: 600, height: 700)
+        .sheet(isPresented: $showMinigame) {
+            PathWordleView(targetPath: teleportedPath, isPresented: $showMinigame)
+        }
     }
 
     func spinWheel() {
@@ -149,6 +154,9 @@ struct WheelOfDoomView: View {
 
         let newPath = playgroundDir.appendingPathComponent(file.name)
         try? FileManager.default.moveItem(at: file.path, to: newPath)
+
+        teleportedPath = newPath.path
+        showMinigame = true
     }
 
     func deleteFile() {
