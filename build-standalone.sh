@@ -9,7 +9,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
 OUTPUT_DIR="$SCRIPT_DIR/Builds"
-APP_NAME="WheelOfDoom"
+APP_NAME="UselessFinder"
 
 echo "🎡 Building Standalone Wheel of Doom App..."
 echo ""

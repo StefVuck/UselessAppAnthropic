@@ -41,7 +41,7 @@ This builds and launches the app automatically.
 ```bash
 ./build-standalone.sh
 ```
-This creates `WheelOfDoom.app` in the `Builds/` folder. You can:
+This creates `UselessFinder.app` in the `Builds/` folder. You can:
 - Double-click to run
 - Drag to Applications folder
 - Share with friends (at your own risk)
