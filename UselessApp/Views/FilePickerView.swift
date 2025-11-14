@@ -178,7 +178,7 @@ struct ChaoticFilePickerView: View {
                 fileListView(items: items)
             }
         }
-        .frame(width: 800, height: 650)
+        .frame(width: 900, height: 700)
         .sheet(isPresented: $showWheel) {
             if let file = selectedFile {
                 WheelOfDoomView(file: file)
