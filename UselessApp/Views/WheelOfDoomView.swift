@@ -38,7 +38,6 @@ struct WheelOfDoomView: View {
                 PointerArrow()
             }
             .frame(width: 500, height: 550)
-            .border(Color.red, width: 2)
 
             Spacer()
 
@@ -89,8 +88,8 @@ struct WheelOfDoomView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
-        .padding(40)
-        .frame(width: 700, height: 850)
+        .padding(30)
+        .frame(width: 700, height: 900)
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $showMinigame) {
             PathWordleView(targetPath: teleportedPath, isPresented: $showMinigame)
