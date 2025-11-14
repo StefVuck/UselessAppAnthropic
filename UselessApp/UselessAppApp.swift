@@ -4,7 +4,7 @@ import SwiftUI
 struct UselessAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            DictationLoginView()
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
