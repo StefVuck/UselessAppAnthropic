@@ -18,6 +18,9 @@
 		D1A017 /* WheelOfDoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A018 /* WheelOfDoomView.swift */; };
 		D1A019 /* WheelSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A020 /* WheelSegments.swift */; };
 		D1A031 /* PathWordleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A032 /* PathWordleView.swift */; };
+		D1A041 /* ClippyCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A042 /* ClippyCharacter.swift */; };
+		D1A043 /* ClippyFloatingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A044 /* ClippyFloatingWindow.swift */; };
+		D1A045 /* ClippyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A046 /* ClippyService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +37,9 @@
 		D1A018 /* WheelOfDoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelOfDoomView.swift; sourceTree = "<group>"; };
 		D1A020 /* WheelSegments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelSegments.swift; sourceTree = "<group>"; };
 		D1A032 /* PathWordleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathWordleView.swift; sourceTree = "<group>"; };
+		D1A042 /* ClippyCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClippyCharacter.swift; sourceTree = "<group>"; };
+		D1A044 /* ClippyFloatingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClippyFloatingWindow.swift; sourceTree = "<group>"; };
+		D1A046 /* ClippyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClippyService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +88,7 @@
 			children = (
 				D1A012 /* FileItem.swift */,
 				D1A014 /* WheelOutcome.swift */,
+				D1A042 /* ClippyCharacter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -92,6 +99,7 @@
 				D1A016 /* FilePickerView.swift */,
 				D1A018 /* WheelOfDoomView.swift */,
 				D1A032 /* PathWordleView.swift */,
+				D1A044 /* ClippyFloatingWindow.swift */,
 				B1EF32E52EC7BAD600989441 /* DictationLoginView.swift */,
 				D1A023 /* Components */,
 			);
@@ -110,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				B1EF32E72EC7BAE700989441 /* DictationService.swift */,
+				D1A046 /* ClippyService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -193,6 +202,9 @@
 				B1EF32E82EC7BAE700989441 /* DictationService.swift in Sources */,
 				D1A031 /* PathWordleView.swift in Sources */,
 				B1EF32E62EC7BAD600989441 /* DictationLoginView.swift in Sources */,
+				D1A041 /* ClippyCharacter.swift in Sources */,
+				D1A043 /* ClippyFloatingWindow.swift in Sources */,
+				D1A045 /* ClippyService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
