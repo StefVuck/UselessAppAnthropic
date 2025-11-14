@@ -179,9 +179,9 @@ struct ChaoticFilePickerView: View {
             }
         }
         .frame(width: 600, height: 500)
-        .sheet(isPresented: $showWheel) {
-            if let file = selectedFile {
-                WheelOfDoomView(file: file)
+        .onChange(of: showWheel) { _, newValue in
+            if newValue, let file = selectedFile {
+                openWheelWindow(for: file)
             }
         }
         .onAppear {
@@ -353,6 +353,22 @@ struct ChaoticFilePickerView: View {
         currentPath = FileSystemService.shared.playgroundPath
         shuffledItems = []
         performInitialShuffle()
+    }
+
+    private func openWheelWindow(for file: FileItem) {
+        let wheelView = WheelOfDoomView(file: file)
+        let hostingController = NSHostingController(rootView: wheelView)
+        let window = NSWindow(contentViewController: hostingController)
+        window.title = "Wheel of Doom"
+        window.setContentSize(NSSize(width: 750, height: 950))
+        window.styleMask = [.titled, .closable]
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+
+        // Reset state after opening
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            showWheel = false
+        }
     }
 }
 
