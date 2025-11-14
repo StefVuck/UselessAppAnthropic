@@ -10,10 +10,11 @@ class ClippyFloatingWindow: NSPanel {
             defer: false
         )
 
-        self.level = .floating
-        self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+        self.level = .statusBar
+        self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         self.isFloatingPanel = true
         self.becomesKeyOnlyIfNeeded = true
+        self.hidesOnDeactivate = false
         self.isMovableByWindowBackground = true
         self.titlebarAppearsTransparent = true
         self.titleVisibility = .hidden
@@ -36,11 +37,16 @@ class ClippyFloatingWindow: NSPanel {
     }
 
     func show() {
-        self.orderFront(nil)
+        self.makeKeyAndOrderFront(nil)
         self.alphaValue = 0
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.3
             self.animator().alphaValue = 1.0
+        }
+
+        // Ensure it stays on top
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.orderFrontRegardless()
         }
     }
 
