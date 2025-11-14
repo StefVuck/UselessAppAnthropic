@@ -13,10 +13,16 @@ struct DictationLoginView: View {
     @State private var pulseAnimation = false
     @State private var shakeOffset: CGFloat = 0
     @State private var showGoodBoyPopup = false
+    @State private var showBadTonePopup = false
+    @State private var useBadToneCredentials = false
 
     // Target credentials (for demo)
-    private let targetUsername = "test"
-    private let targetPassword = "test"
+    private var targetUsername: String {
+        useBadToneCredentials ? "skibidi" : "test"
+    }
+    private var targetPassword: String {
+        useBadToneCredentials ? "toilet" : "test"
+    }
 
     enum LoginField {
         case username, password
@@ -104,9 +110,24 @@ struct DictationLoginView: View {
                 VStack(spacing: 15) {
                     // Username Field
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Username")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                        HStack {
+                            Text("Username")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+
+                            Spacer()
+
+                            if !spokenUsername.isEmpty {
+                                Button(action: {
+                                    spokenUsername = ""
+                                    currentField = .username
+                                }) {
+                                    Text("Clear")
+                                        .font(.caption2)
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        }
 
                         HStack {
                             Text(spokenUsername.isEmpty ? "Speak to enter..." : spokenUsername)
@@ -126,9 +147,24 @@ struct DictationLoginView: View {
 
                     // Password Field
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Password")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                        HStack {
+                            Text("Password")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+
+                            Spacer()
+
+                            if !spokenPassword.isEmpty {
+                                Button(action: {
+                                    spokenPassword = ""
+                                    currentField = .password
+                                }) {
+                                    Text("Clear")
+                                        .font(.caption2)
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        }
 
                         HStack {
                             Text(spokenPassword.isEmpty ? "Speak to enter..." : String(repeating: "•", count: spokenPassword.count))
@@ -220,7 +256,12 @@ struct DictationLoginView: View {
 
                     // Debug skip button
                     Button(action: {
-                        showGoodBoyPopup = true
+                        // 1 in 3 chance for bad tone popup
+                        if Int.random(in: 1...3) == 1 {
+                            showBadTonePopup = true
+                        } else {
+                            showGoodBoyPopup = true
+                        }
                     }) {
                         Text("DEBUG: Skip Login")
                             .font(.caption2)
@@ -244,11 +285,34 @@ struct DictationLoginView: View {
                         isAuthenticated = true
                     })
                 }
+                if showBadTonePopup {
+                    BadTonePopup(isPresented: $showBadTonePopup, onDismiss: {
+                        // Reset login and force new credentials
+                        useBadToneCredentials = true
+                        spokenUsername = ""
+                        spokenPassword = ""
+                        currentField = .username
+                        attemptCount = 0
+                        instructionMessage = "Please speak your NEW username clearly"
+                    })
+                }
             }
         )
-        .sheet(isPresented: $isAuthenticated) {
-            ContentView()
-                .frame(minWidth: 600, minHeight: 500)
+        .onChange(of: isAuthenticated) { _, newValue in
+            if newValue {
+                // Open ContentView in a new window
+                let contentView = ContentView()
+                let hostingController = NSHostingController(rootView: contentView)
+                let window = NSWindow(contentViewController: hostingController)
+                window.title = "Chaotic Finder"
+                window.setContentSize(NSSize(width: 800, height: 700))
+                window.makeKeyAndOrderFront(nil)
+
+                // Close the login window
+                if let loginWindow = NSApplication.shared.windows.first(where: { $0.contentViewController?.view.window != nil }) {
+                    loginWindow.close()
+                }
+            }
         }
     }
 
@@ -287,7 +351,12 @@ struct DictationLoginView: View {
 
         if usernameMatch && passwordMatch {
             instructionMessage = "Authentication successful! Welcome."
-            showGoodBoyPopup = true
+            // 1 in 3 chance for bad tone popup
+            if Int.random(in: 1...3) == 1 {
+                showBadTonePopup = true
+            } else {
+                showGoodBoyPopup = true
+            }
         } else {
             // Failed attempt
             triggerShakeAnimation()
@@ -309,7 +378,12 @@ struct DictationLoginView: View {
 
     func bypassLogin() {
         instructionMessage = "Fine. You win. Welcome."
-        showGoodBoyPopup = true
+        // 1 in 3 chance for bad tone popup
+        if Int.random(in: 1...3) == 1 {
+            showBadTonePopup = true
+        } else {
+            showGoodBoyPopup = true
+        }
     }
 
     func triggerShakeAnimation() {
@@ -324,36 +398,46 @@ struct DictationLoginView: View {
     // MARK: - Dynamic Messages
 
     func getUsernameInstruction() -> String {
+        let username = useBadToneCredentials ? "skibidi" : "test"
         switch attemptCount {
-        case 0: return "Please speak your username clearly"
+        case 0: return useBadToneCredentials ? "Please speak your NEW username clearly" : "Please speak your username clearly"
         case 1: return "Speak your username (try speaking more clearly this time)"
         case 2: return "Username. Speak. Now. Enunciate."
         case 3...5: return "Are you even trying? Say your username."
-        case 6...10: return "This is painful. Just say 'test' for username."
-        default: return "I'm begging you. Username is 'test'."
+        case 6...10: return "This is painful. Just say '\(username)' for username."
+        default: return "I'm begging you. Username is '\(username)'."
         }
     }
 
     func getPasswordInstruction() -> String {
+        let password = useBadToneCredentials ? "toilet" : "test"
+
+        // Special message for skibidi mode
+        if useBadToneCredentials && attemptCount <= 1 {
+            return "are you really gonna say that just to log in damn 🤨"
+        }
+
         switch attemptCount {
         case 0: return "Now speak your password"
         case 1: return "Speak your password (remember: no keyboard)"
         case 2: return "Password. Use your voice. We've been over this."
         case 3...5: return "JUST. SAY. THE. PASSWORD."
-        case 6...10: return "The password is literally just 'test'"
-        default: return "Say 'test'. That's it. Just 'test'."
+        case 6...10: return "The password is literally just '\(password)'"
+        default: return "Say '\(password)'. That's it. Just '\(password)'."
         }
     }
 
     func getFailureMessage() -> String {
+        let username = useBadToneCredentials ? "skibidi" : "test"
+        let password = useBadToneCredentials ? "toilet" : "test"
         switch attemptCount {
         case 1: return "Authentication failed. Please try again."
         case 2: return "Still not quite right. Speak more clearly."
         case 3: return "Really? Try again. Enunciate."
         case 4: return "I heard '\(spokenUsername)' and '\(spokenPassword)'. Is that what you meant?"
         case 5: return "This is attempt #5. Maybe check if your microphone works?"
-        case 6...8: return "Hint: Both username and password are 'test'"
-        case 9...12: return "LITERALLY just say 'test' twice."
+        case 6...8: return "Hint: Username is '\(username)' and password is '\(password)'"
+        case 9...12: return "LITERALLY just say '\(username)' then '\(password)'."
         default: return "I have lost all faith in humanity."
         }
     }
@@ -448,6 +532,103 @@ struct GoodBoyPopup: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.black)
                     .shadow(color: .white.opacity(0.2), radius: 30)
+            )
+            .scaleEffect(scale)
+            .opacity(opacity)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                scale = 1.0
+                opacity = 1.0
+            }
+        }
+    }
+
+    func dismissPopup() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            scale = 0.8
+            opacity = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            isPresented = false
+            onDismiss()
+        }
+    }
+}
+
+// MARK: - Bad Tone Popup
+
+struct BadTonePopup: View {
+    @Binding var isPresented: Bool
+    let onDismiss: () -> Void
+    @State private var scale: CGFloat = 0.5
+    @State private var opacity: Double = 0
+
+    var body: some View {
+        ZStack {
+            // Dark overlay
+            Color.black.opacity(0.8)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    dismissPopup()
+                }
+
+            // Popup content
+            VStack(spacing: 30) {
+                // "I DON'T LIKE THE TONE OF YOUR VOICE" text
+                Text("I DON'T LIKE THE\nTONE OF YOUR VOICE")
+                    .font(.system(size: 36, weight: .bold))
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+
+                // Skibidi Toilet image
+                if let nsImage = NSImage(named: "skibidi") {
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 400, maxHeight: 400)
+                        .cornerRadius(20)
+                        .shadow(color: .red.opacity(0.3), radius: 20)
+                } else {
+                    Text("Image not found")
+                        .foregroundColor(.red)
+                }
+
+                // New credentials message
+                VStack(spacing: 10) {
+                    Text("Your username is now")
+                        .font(.title2)
+                        .foregroundColor(.white)
+
+                    Text("SKIBIDI")
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(.yellow)
+
+                    Text("and password is")
+                        .font(.title2)
+                        .foregroundColor(.white)
+
+                    Text("TOILET")
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(.yellow)
+                }
+
+                // Dismiss button
+                Button(action: dismissPopup) {
+                    Text("Start Over")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 15)
+                        .background(Color.red)
+                        .cornerRadius(10)
+                }
+            }
+            .padding(40)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.black)
+                    .shadow(color: .red.opacity(0.2), radius: 30)
             )
             .scaleEffect(scale)
             .opacity(opacity)

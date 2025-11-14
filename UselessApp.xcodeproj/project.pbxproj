@@ -10,6 +10,7 @@
 		B1EF32E62EC7BAD600989441 /* DictationLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF32E52EC7BAD600989441 /* DictationLoginView.swift */; };
 		B1EF32E82EC7BAE700989441 /* DictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF32E72EC7BAE700989441 /* DictationService.swift */; };
 		B1EF32EC2EC7BE6E00989441 /* John_Pork.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B1EF32EB2EC7BE6E00989441 /* John_Pork.jpg */; };
+		B1EF32EE2EC7C15900989441 /* skibidi.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B1EF32ED2EC7C15900989441 /* skibidi.jpg */; };
 		D1A001 /* UselessAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A002 /* UselessAppApp.swift */; };
 		D1A003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A004 /* ContentView.swift */; };
 		D1A005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1A006 /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		B1EF32E52EC7BAD600989441 /* DictationLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationLoginView.swift; sourceTree = "<group>"; };
 		B1EF32E72EC7BAE700989441 /* DictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationService.swift; sourceTree = "<group>"; };
 		B1EF32EB2EC7BE6E00989441 /* John_Pork.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = John_Pork.jpg; sourceTree = "<group>"; };
+		B1EF32ED2EC7C15900989441 /* skibidi.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = skibidi.jpg; sourceTree = "<group>"; };
 		D1A002 /* UselessAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UselessAppApp.swift; sourceTree = "<group>"; };
 		D1A004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D1A006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				D1A006 /* Assets.xcassets */,
 				D1A008 /* UselessApp.entitlements */,
 				B1EF32EB2EC7BE6E00989441 /* John_Pork.jpg */,
+				B1EF32ED2EC7C15900989441 /* skibidi.jpg */,
 			);
 			path = UselessApp;
 			sourceTree = "<group>";
@@ -185,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1EF32EC2EC7BE6E00989441 /* John_Pork.jpg in Resources */,
+				B1EF32EE2EC7C15900989441 /* skibidi.jpg in Resources */,
 				D1A005 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
