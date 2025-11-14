@@ -15,6 +15,7 @@
 		D1A015 /* FilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A016 /* FilePickerView.swift */; };
 		D1A017 /* WheelOfDoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A018 /* WheelOfDoomView.swift */; };
 		D1A019 /* WheelSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A020 /* WheelSegments.swift */; };
+		D1A031 /* PathWordleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A032 /* PathWordleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		D1A016 /* FilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerView.swift; sourceTree = "<group>"; };
 		D1A018 /* WheelOfDoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelOfDoomView.swift; sourceTree = "<group>"; };
 		D1A020 /* WheelSegments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelSegments.swift; sourceTree = "<group>"; };
+		D1A032 /* PathWordleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathWordleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 			children = (
 				D1A016 /* FilePickerView.swift */,
 				D1A018 /* WheelOfDoomView.swift */,
+				D1A032 /* PathWordleView.swift */,
 				D1A023 /* Components */,
 			);
 			path = Views;
@@ -173,6 +176,7 @@
 				D1A015 /* FilePickerView.swift in Sources */,
 				D1A017 /* WheelOfDoomView.swift in Sources */,
 				D1A019 /* WheelSegments.swift in Sources */,
+				D1A031 /* PathWordleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
