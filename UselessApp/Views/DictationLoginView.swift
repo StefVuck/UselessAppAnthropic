@@ -2,6 +2,7 @@ import SwiftUI
 import Speech
 
 struct DictationLoginView: View {
+    @ObservedObject var appState: AppState
     @StateObject private var dictationService = DictationService()
     @State private var currentField: LoginField = .username
     @State private var spokenUsername = ""
@@ -9,7 +10,6 @@ struct DictationLoginView: View {
     @State private var attemptCount = 0
     @State private var showBypassOption = false
     @State private var instructionMessage = "Please speak your username clearly"
-    @State private var isAuthenticated = false
     @State private var pulseAnimation = false
     @State private var shakeOffset: CGFloat = 0
     @State private var showGoodBoyPopup = false
@@ -282,7 +282,7 @@ struct DictationLoginView: View {
             Group {
                 if showGoodBoyPopup {
                     GoodBoyPopup(isPresented: $showGoodBoyPopup, onDismiss: {
-                        isAuthenticated = true
+                        appState.isAuthenticated = true
                     })
                 }
                 if showBadTonePopup {
@@ -298,22 +298,6 @@ struct DictationLoginView: View {
                 }
             }
         )
-        .onChange(of: isAuthenticated) { _, newValue in
-            if newValue {
-                // Open ContentView in a new window
-                let contentView = ContentView()
-                let hostingController = NSHostingController(rootView: contentView)
-                let window = NSWindow(contentViewController: hostingController)
-                window.title = "Chaotic Finder"
-                window.setContentSize(NSSize(width: 800, height: 700))
-                window.makeKeyAndOrderFront(nil)
-
-                // Close the login window
-                if let loginWindow = NSApplication.shared.windows.first(where: { $0.contentViewController?.view.window != nil }) {
-                    loginWindow.close()
-                }
-            }
-        }
     }
 
     // MARK: - Actions
@@ -654,5 +638,5 @@ struct BadTonePopup: View {
 }
 
 #Preview {
-    DictationLoginView()
+    DictationLoginView(appState: AppState())
 }
