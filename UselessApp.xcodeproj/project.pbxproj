@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D41CB669ECA74672BDE810A7 /* BrainRotQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92A81AFF48247CCBA5448FA /* BrainRotQuizView.swift */; };
 		B1EF32E62EC7BAD600989441 /* DictationLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF32E52EC7BAD600989441 /* DictationLoginView.swift */; };
 		B1EF32E82EC7BAE700989441 /* DictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF32E72EC7BAE700989441 /* DictationService.swift */; };
 		B1EF32EC2EC7BE6E00989441 /* John_Pork.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B1EF32EB2EC7BE6E00989441 /* John_Pork.jpg */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C92A81AFF48247CCBA5448FA /* BrainRotQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UselessApp/Views/BrainRotQuizView.swift; sourceTree = "<group>"; };
 		B1EF32E52EC7BAD600989441 /* DictationLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationLoginView.swift; sourceTree = "<group>"; };
 		B1EF32E72EC7BAE700989441 /* DictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationService.swift; sourceTree = "<group>"; };
 		B1EF32EB2EC7BE6E00989441 /* John_Pork.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = John_Pork.jpg; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				D1A019 /* WheelSegments.swift in Sources */,
 				B1EF32E82EC7BAE700989441 /* DictationService.swift in Sources */,
 				D1A031 /* PathWordleView.swift in Sources */,
+				D41CB669ECA74672BDE810A7 /* BrainRotQuizView.swift in Sources */,
 				B1EF32E62EC7BAD600989441 /* DictationLoginView.swift in Sources */,
 				D1A041 /* ClippyCharacter.swift in Sources */,
 				D1A043 /* ClippyFloatingWindow.swift in Sources */,

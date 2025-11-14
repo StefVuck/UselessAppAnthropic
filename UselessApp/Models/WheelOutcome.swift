@@ -15,9 +15,9 @@ enum WheelOutcome: String, CaseIterable {
 
     var probability: Double {
         switch self {
-        case .open: return 0.50
-        case .teleport: return 0.45
-        case .delete: return 0.05
+        case .open: return 0.30
+        case .teleport: return 0.50
+        case .delete: return 0.30
         }
     }
 
@@ -42,9 +42,9 @@ enum WheelOutcome: String, CaseIterable {
 
     static func random() -> WheelOutcome {
         let roll = Double.random(in: 0...1)
-        if roll < 0.05 {
+        if roll < 0.30 {
             return .delete
-        } else if roll < 0.50 {
+        } else if roll < 0.80 {
             return .teleport
         } else {
             return .open
@@ -66,60 +66,42 @@ struct WheelSegmentData: Identifiable {
     static func generateSegments() -> [WheelSegmentData] {
         var segments: [WheelSegmentData] = []
 
-        let deleteSectionWidth = 6.0
-        let numDeleteSections = 6
-        let deletePositions: [Double] = [30, 90, 150, 210, 270, 330]
+        // 30% delete, 50% teleport, 30% open -> but need to fit in 360 degrees
+        // Let's create alternating segments with proper proportions
+        let deleteAngle = 108.0  // 30% of 360
+        let teleportAngle = 180.0  // 50% of 360
+        let openAngle = 72.0  // 20% of 360
 
         var currentAngle = 0.0
 
-        for i in 0..<360 {
-            let angle = Double(i)
+        // Create 3 delete sections evenly spaced
+        let deletePositions = [0.0, 120.0, 240.0]
 
-            if deletePositions.contains(where: { abs(angle - $0) < deleteSectionWidth / 2 }) {
-                if segments.last?.outcome != .delete {
-                    let startDeleteAngle = angle
-                    let endDeleteAngle = angle + deleteSectionWidth
-                    segments.append(WheelSegmentData(
-                        outcome: .delete,
-                        startAngle: startDeleteAngle,
-                        endAngle: min(endDeleteAngle, 360),
-                        showLabel: true
-                    ))
-                    currentAngle = min(endDeleteAngle, 360)
-                }
-            }
+        for deletePos in deletePositions {
+            // Delete segment
+            segments.append(WheelSegmentData(
+                outcome: .delete,
+                startAngle: deletePos,
+                endAngle: deletePos + 36.0,
+                showLabel: true
+            ))
+
+            // Teleport segment after delete
+            segments.append(WheelSegmentData(
+                outcome: .teleport,
+                startAngle: deletePos + 36.0,
+                endAngle: deletePos + 96.0,
+                showLabel: true
+            ))
+
+            // Open segment
+            segments.append(WheelSegmentData(
+                outcome: .open,
+                startAngle: deletePos + 96.0,
+                endAngle: deletePos + 120.0,
+                showLabel: true
+            ))
         }
-
-        segments.sort { $0.startAngle < $1.startAngle }
-
-        var fillerSegments: [WheelSegmentData] = []
-        for i in 0..<segments.count {
-            let currentEnd = segments[i].endAngle
-            let nextStart = i + 1 < segments.count ? segments[i + 1].startAngle : 360 + segments[0].startAngle
-
-            if nextStart > currentEnd {
-                let gapSize = nextStart - currentEnd
-                let openSize = gapSize * 0.53
-                let teleportSize = gapSize * 0.47
-
-                fillerSegments.append(WheelSegmentData(
-                    outcome: .open,
-                    startAngle: currentEnd,
-                    endAngle: currentEnd + openSize,
-                    showLabel: openSize > 20
-                ))
-
-                fillerSegments.append(WheelSegmentData(
-                    outcome: .teleport,
-                    startAngle: currentEnd + openSize,
-                    endAngle: currentEnd + openSize + teleportSize,
-                    showLabel: teleportSize > 20
-                ))
-            }
-        }
-
-        segments.append(contentsOf: fillerSegments)
-        segments.sort { $0.startAngle < $1.startAngle }
 
         return segments
     }

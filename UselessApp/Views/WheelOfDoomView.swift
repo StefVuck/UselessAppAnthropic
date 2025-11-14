@@ -10,6 +10,7 @@ struct WheelOfDoomView: View {
     @State private var spinCount = 0
     @State private var showMinigame = false
     @State private var teleportedPath = ""
+    @State private var showQuiz = false
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -94,6 +95,21 @@ struct WheelOfDoomView: View {
         .sheet(isPresented: $showMinigame) {
             PathWordleView(targetPath: teleportedPath, isPresented: $showMinigame)
         }
+        .overlay {
+            if showQuiz {
+                BrainRotQuizView(
+                    isPresented: $showQuiz,
+                    onPass: {
+                        // They passed - open the file instead
+                        openFile()
+                    },
+                    onFail: {
+                        // They failed - actually delete it
+                        actuallyDeleteFile()
+                    }
+                )
+            }
+        }
     }
 
     func spinWheel() {
@@ -147,7 +163,8 @@ struct WheelOfDoomView: View {
         case .teleport:
             teleportFile()
         case .delete:
-            deleteFile()
+            // Show quiz instead of deleting immediately
+            showQuiz = true
         }
     }
 
@@ -172,7 +189,7 @@ struct WheelOfDoomView: View {
         showMinigame = true
     }
 
-    func deleteFile() {
+    func actuallyDeleteFile() {
         ClippyService.shared.showForDelete()
 
         let homeDir = FileManager.default.homeDirectoryForCurrentUser
