@@ -49,23 +49,199 @@ struct FilePickerView: View {
     }
 
     func createSampleFiles() {
-        let sampleFiles = [
-            "important_document.txt",
-            "vacation_photo.jpg",
-            "project_final.docx",
-            "budget_2024.xlsx",
-            "presentation.pdf"
+        let fileManager = FileManager.default
+
+        let folders = [
+            "Work Documents",
+            "Personal",
+            "Projects",
+            "Photos",
+            "Downloads",
+            "Tax Stuff",
+            "Old Files"
         ]
 
-        for fileName in sampleFiles {
-            let filePath = currentPath.appendingPathComponent(fileName)
-            let content = "This is a sample file: \(fileName)"
-            try? content.write(to: filePath, atomically: true, encoding: .utf8)
+        for folder in folders {
+            let folderPath = currentPath.appendingPathComponent(folder)
+            try? fileManager.createDirectory(at: folderPath, withIntermediateDirectories: true)
         }
 
-        let subfolderPath = currentPath.appendingPathComponent("MyFolder")
-        try? FileManager.default.createDirectory(at: subfolderPath,
-                                                 withIntermediateDirectories: true)
+        createWorkDocuments()
+        createPersonalFiles()
+        createProjects()
+        createPhotos()
+        createDownloads()
+        createTaxFiles()
+        createOldFiles()
+        createRootFiles()
+    }
+
+    func createWorkDocuments() {
+        let workPath = currentPath.appendingPathComponent("Work Documents")
+        let files = [
+            "Q4_Report_FINAL.docx",
+            "Q4_Report_FINAL_v2.docx",
+            "Q4_Report_FINAL_FINAL.docx",
+            "Q4_Report_ACTUALLY_FINAL.docx",
+            "Meeting_Notes_2024.txt",
+            "Budget_Proposal.xlsx",
+            "Client_Presentation.pptx",
+            "Performance_Review_Draft.pdf",
+            "Untitled.docx",
+            "DO_NOT_DELETE.txt"
+        ]
+
+        for file in files {
+            createFile(at: workPath.appendingPathComponent(file), size: 15000)
+        }
+
+        let subfolderPath = workPath.appendingPathComponent("Archive")
+        try? FileManager.default.createDirectory(at: subfolderPath, withIntermediateDirectories: true)
+        createFile(at: subfolderPath.appendingPathComponent("old_project.zip"), size: 250000)
+    }
+
+    func createPersonalFiles() {
+        let personalPath = currentPath.appendingPathComponent("Personal")
+        let files = [
+            "TODO.txt",
+            "passwords_DO_NOT_SHARE.txt",
+            "diary_2024.txt",
+            "book_recommendations.txt",
+            "recipe_moms_lasagna.pdf",
+            "gym_membership_card.jpg",
+            "insurance_documents.pdf"
+        ]
+
+        for file in files {
+            createFile(at: personalPath.appendingPathComponent(file), size: 8000)
+        }
+    }
+
+    func createProjects() {
+        let projectsPath = currentPath.appendingPathComponent("Projects")
+
+        let projectFolders = ["Website Redesign", "App Idea", "Abandoned", "Maybe Someday"]
+        for folder in projectFolders {
+            let folderPath = projectsPath.appendingPathComponent(folder)
+            try? FileManager.default.createDirectory(at: folderPath, withIntermediateDirectories: true)
+        }
+
+        let websitePath = projectsPath.appendingPathComponent("Website Redesign")
+        createFile(at: websitePath.appendingPathComponent("index.html"), size: 5000)
+        createFile(at: websitePath.appendingPathComponent("styles.css"), size: 3000)
+        createFile(at: websitePath.appendingPathComponent("script.js"), size: 7000)
+        createFile(at: websitePath.appendingPathComponent("mockup_v1.png"), size: 180000)
+
+        let appPath = projectsPath.appendingPathComponent("App Idea")
+        createFile(at: appPath.appendingPathComponent("pitch.txt"), size: 2000)
+        createFile(at: appPath.appendingPathComponent("wireframes.pdf"), size: 95000)
+
+        let abandonedPath = projectsPath.appendingPathComponent("Abandoned")
+        createFile(at: abandonedPath.appendingPathComponent("project_that_was_gonna_be_big.zip"), size: 500000)
+        createFile(at: abandonedPath.appendingPathComponent("why_this_failed.txt"), size: 1500)
+    }
+
+    func createPhotos() {
+        let photosPath = currentPath.appendingPathComponent("Photos")
+        let years = ["2022", "2023", "2024"]
+
+        for year in years {
+            let yearPath = photosPath.appendingPathComponent(year)
+            try? FileManager.default.createDirectory(at: yearPath, withIntermediateDirectories: true)
+        }
+
+        let photos2024 = photosPath.appendingPathComponent("2024")
+        let photoFiles = [
+            "IMG_0001.jpg",
+            "IMG_0002.jpg",
+            "IMG_0003_blurry.jpg",
+            "IMG_0004.jpg",
+            "vacation_beach.jpg",
+            "vacation_beach (1).jpg",
+            "screenshot_2024_11_14.png",
+            "meme_i_downloaded.jpg",
+            "cat_photo_cute.jpg"
+        ]
+
+        for photo in photoFiles {
+            createFile(at: photos2024.appendingPathComponent(photo), size: 1200000)
+        }
+    }
+
+    func createDownloads() {
+        let downloadsPath = currentPath.appendingPathComponent("Downloads")
+        let files = [
+            "invoice_march.pdf",
+            "setup_installer.dmg",
+            "random_article.pdf",
+            "screenshot_2024_10_12.png",
+            "Untitled.png",
+            "zoom_recording.mp4",
+            "document (1).pdf",
+            "document (2).pdf",
+            "document (3).pdf",
+            "file.zip",
+            "downloaded_template.xlsx"
+        ]
+
+        for file in files {
+            let size = file.hasSuffix(".mp4") ? 25000000 : (file.hasSuffix(".dmg") ? 85000000 : 45000)
+            createFile(at: downloadsPath.appendingPathComponent(file), size: size)
+        }
+    }
+
+    func createTaxFiles() {
+        let taxPath = currentPath.appendingPathComponent("Tax Stuff")
+        let files = [
+            "tax_return_2023.pdf",
+            "receipts_2023.xlsx",
+            "receipts_2024.xlsx",
+            "important_tax_document.pdf",
+            "do_not_lose_this.pdf",
+            "deductions.txt"
+        ]
+
+        for file in files {
+            createFile(at: taxPath.appendingPathComponent(file), size: 35000)
+        }
+    }
+
+    func createOldFiles() {
+        let oldPath = currentPath.appendingPathComponent("Old Files")
+        let files = [
+            "thesis_2015.docx",
+            "college_notes.zip",
+            "my_first_website.html",
+            "cringe_poetry.txt",
+            "MySpace_backup.zip",
+            "AOL_emails.txt",
+            "high_school_essay.doc"
+        ]
+
+        for file in files {
+            createFile(at: oldPath.appendingPathComponent(file), size: 25000)
+        }
+    }
+
+    func createRootFiles() {
+        let rootFiles = [
+            "README.txt",
+            "notes.txt",
+            "temporary_file.tmp",
+            "config.json",
+            "backup_before_disaster.zip",
+            "this_is_fine.jpg",
+            "definitely_not_suspicious.exe"
+        ]
+
+        for file in rootFiles {
+            createFile(at: currentPath.appendingPathComponent(file), size: 12000)
+        }
+    }
+
+    func createFile(at path: URL, size: Int) {
+        let content = String(repeating: "X", count: size)
+        try? content.write(to: path, atomically: true, encoding: .utf8)
     }
 
     func loadFiles() {
