@@ -1,15 +1,32 @@
 # Useless App - Funny & Completely Pointless Mac Applications
 
+## Project Overview
+
+**Main Implementation: Chaotic Finder**
+A file browser that makes accessing files and folders as unpredictable and anxiety-inducing as possible.
+
 ## Project Structure
 ```
 UselessApp/
 ├── UselessApp.xcodeproj/
 ├── UselessApp/
-│   ├── UselessAppApp.swift       # Main app entry point
-│   ├── ContentView.swift          # Primary view
-│   ├── Assets.xcassets/           # App icons and assets
-│   └── UselessApp.entitlements    # App permissions
-└── CLAUDE.md                      # This file
+│   ├── UselessAppApp.swift           # Main app entry point
+│   ├── ContentView.swift              # Navigation hub
+│   ├── Views/
+│   │   ├── DictationLoginView.swift   # Voice-only authentication
+│   │   ├── ChaoticFinderView.swift    # Main file browser
+│   │   ├── WheelOfDoomView.swift      # Roulette wheel for file actions
+│   │   └── FolderShuffleView.swift    # Folder contents display
+│   ├── Models/
+│   │   ├── FileItem.swift             # File/folder representation
+│   │   ├── ShuffleManager.swift       # Handles folder shuffling logic
+│   │   └── WheelOutcome.swift         # Wheel results enum
+│   ├── Services/
+│   │   ├── DictationService.swift     # Speech recognition
+│   │   └── FileSystemService.swift    # Safe file operations
+│   ├── Assets.xcassets/               # App icons and assets
+│   └── UselessApp.entitlements        # App permissions
+└── CLAUDE.md                          # This file
 ```
 
 ## How to Use
@@ -168,6 +185,72 @@ Tracks how many times you switch apps.
 - Interruption frequency
 - "Focus time" (under 10 seconds)
 - Daily report of your inability to concentrate
+
+### 21. Airdrop Roulette
+Randomly selects files from your Mac and threatens to Airdrop them to nearby devices.
+- Scans random folders and picks embarrassing file names
+- Shows "Searching for nearby devices..." with dramatic countdown
+- "Almost sent 'awkward_photo_2015.jpg' to 'John's iPhone'"
+- Statistics: "Close calls: 47, Disasters averted: 47"
+- Panic button that does nothing
+- "Russian Roulette" mode: claims one file will actually be sent (it won't)
+- Fake device list: "Mom's iPad (2m away)", "Your Boss's MacBook (5m away)"
+- History of "near misses" with timestamps
+- Anxiety level meter that increases with each round
+- Safe mode: only threatens to send files from ~/Desktop/SafeFolder (that doesn't exist)
+
+**Implementation Note**: Due to macOS security, actual Airdrop automation isn't possible via public APIs. This app simulates the experience using NSSharingService UI or just threatens to share without actually doing it, maximizing anxiety for comedy.
+
+**Alternative Version - Airdrop Acceptor Roulette**:
+- Monitors for incoming Airdrop requests (via notifications)
+- Randomly suggests accepting or declining
+- "Mysterious file from 'Unknown iPhone'? Let's find out!"
+- Coin flip animation to decide
+- Keeps score of "good decisions" vs "regrettable decisions"
+
+### 22. Filesystem Shuffler
+Reorganizes your files using the worst possible organizational systems.
+- "Shuffle by Chaos" - Randomly moves files between folders
+- "Alphabetical by Last Letter" - Sorts files by their last character
+- "Organize by File Size Ascending" - All files mixed, smallest to largest
+- "Random Number Generator" - Renames folders to random numbers
+- "Reverse Psychology" - Puts work files in Photos, photos in Documents
+- "Emoji Folders" - Renames all folders to random emojis
+- "Nested Nightmare" - Creates 15 levels deep folder structures
+- "The Flattener" - Moves everything to Desktop in one massive pile
+- "Time Traveler" - Sorts into folders by creation date down to the minute
+- Preview mode shows what will happen (anxiety-inducing)
+- "Undo" button that requires solving a captcha
+- Progress bar: "Shuffling 1,247 files..."
+- Statistics: "Chaos level: 94%", "Files lost: 0 (probably)"
+
+**Safety Modes**:
+1. **Simulation Mode** (recommended): Only shows what it would do, never actually moves files
+2. **Sandbox Mode**: Only works in ~/Documents/ShufflePlayground test folder
+3. **Reversible Mode**: Creates a manifest.json backup before shuffling, allows one-click restore
+4. **Extreme Mode**: Claims to actually shuffle (shows scary warnings, requires 3 confirmations, then does simulation anyway)
+
+**Implementation Approaches**:
+- Use FileManager to enumerate files in test directory
+- NSFileManager moveItem for actual moving (sandbox only)
+- Store original paths in JSON for undo functionality
+- Animate file count and folder creation for comedy effect
+- Add fake "system integration" that pretends to organize all of ~/Documents
+
+**Extra Features**:
+- "Smart Shuffle" - Uses ML to organize files in the worst possible way for your workflow
+- "Productivity Optimizer" - Hides files you use frequently, promotes files you never touch
+- Daily shuffle option that activates at random times
+- "Find My File" game after shuffling
+- Leaderboard of "most shuffled filesystem" (all fake data)
+
+**UI Elements**:
+- Big red "SHUFFLE NOW" button
+- Multiple scary confirmation dialogs
+- Live preview of new folder structure
+- Chaos meter with satisfying animation
+- Before/After comparison view
+- Fake Terminal output showing file operations
 
 ## Implementation Notes
 
